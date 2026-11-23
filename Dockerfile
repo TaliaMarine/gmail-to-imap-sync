@@ -25,11 +25,12 @@ COPY cmd/ cmd/
 COPY internal/ internal/
 
 ARG TARGETOS TARGETARCH
+ARG VERSION=dev
 # Pure Go (pgx), so the binary runs on the distroless static image.
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
     CGO_ENABLED=0 GOOS=$TARGETOS GOARCH=$TARGETARCH \
-    go build -trimpath -ldflags="-s -w" -o /gmail-archive-sync ./cmd/gmail-archive-sync
+    go build -trimpath -ldflags="-s -w -X github.com/TaliaMarine/gmail-to-imap-sync/internal/version.Version=${VERSION}" -o /gmail-archive-sync ./cmd/gmail-archive-sync
 
 # ---- Stage 3: minimal runtime ----
 # No shell or package manager. The nonroot tag runs as uid/gid 65532.
