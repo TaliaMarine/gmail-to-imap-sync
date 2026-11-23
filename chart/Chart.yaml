@@ -1,6 +1,8 @@
 apiVersion: v2
 name: gmail-archive-sync
-description: Selectively replicates Gmail messages into a self-hosted IMAP server, with a web UI and OIDC sign-in
+description: >-
+  Selectively replicates Gmail messages into a self-hosted IMAP server, with a
+  web UI and OIDC sign-in
 type: application
 version: 0.1.0
 appVersion: 0.1.0
