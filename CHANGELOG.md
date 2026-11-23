@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.2](https://github.com/TaliaMarine/gmail-to-imap-sync/compare/v0.1.1...v0.1.2) (2026-11-23)
+
+
+### Bug Fixes
+
+* report the release version instead of dev ([c196997](https://github.com/TaliaMarine/gmail-to-imap-sync/commit/c196997f772e378a91835e7337fdf09b334bac74))
+
 ## [0.1.1](https://github.com/TaliaMarine/gmail-to-imap-sync/compare/v0.1.0...v0.1.1) (2026-11-23)
 
 
