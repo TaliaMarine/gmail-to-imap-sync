@@ -142,6 +142,8 @@ jobs:
         run: |
           set -euo pipefail
           echo "${{ secrets.GITHUB_TOKEN }}" | helm registry login ghcr.io --username "${{ github.actor }}" --password-stdin
+          # helm keeps its own credentials; cosign reads the docker config, so it needs its own login.
+          echo "${{ secrets.GITHUB_TOKEN }}" | cosign login ghcr.io --username "${{ github.actor }}" --password-stdin
           helm package chart --destination /tmp
           # Final chart location: oci://ghcr.io/<owner>/charts/gmail-archive-sync:<version>
           dest="oci://ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/charts"
