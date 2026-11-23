@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/TaliaMarine/gmail-to-imap-sync/compare/v0.1.0...v0.1.1) (2026-11-23)
+
+
+### Bug Fixes
+
+* **deps:** update go-jose to 4.1.6 (CVE-2026-116587) ([3b92e53](https://github.com/TaliaMarine/gmail-to-imap-sync/commit/3b92e5325b47a8c1477b390bd1bc64d4d31b50ea))
+
 ## 0.1.0 (2026-11-23)
 
 
