@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Gmail Archive Sync: privacy policy</title>
+<style>
+  body { font: 16px/1.6 system-ui, sans-serif; max-width: 42rem; margin: 2.5rem auto; padding: 0 1rem; color: #18222e; }
+  h1 { font-size: 1.6rem; } h2 { font-size: 1.1rem; margin-top: 1.8rem; }
+  a { color: #2d6b6a; }
+</style>
+</head>
+<body>
+<h1>Gmail Archive Sync: privacy policy</h1>
+<p>Gmail Archive Sync is software that its operator runs on their own server. This policy describes what that software does with data.</p>
+
+<h2>Who runs it</h2>
+<p>The person who installs and operates the application on their own server is its only operator. The authors of the software do not operate any service and never receive your data, your credentials or any telemetry.</p>
+
+<h2>What it accesses</h2>
+<p>With your consent through Google's sign-in screen, the application gets read-only access to your Gmail account (the <code>gmail.readonly</code> scope). It reads your messages, their labels and your label names in order to copy the messages to an IMAP mail server that you configure. It cannot send, change or delete anything in Gmail.</p>
+
+<h2>Where the data goes</h2>
+<p>Message content is passed from Google to the IMAP server you chose, and nowhere else. The application does not store message bodies or attachments in its own database. It stores only the account and destination settings you enter, synchronisation progress, and, for messages that failed to copy, their subject, sender, recipients, date and the error, so that failed messages can be retried.</p>
+
+<h2>Credentials</h2>
+<p>Google refresh tokens, the Google client secret and IMAP passwords are stored encrypted on the operator's own server. They are never shown in the user interface or written to logs.</p>
+
+<h2>Sharing</h2>
+<p>No data is sold, shared with third parties, used for advertising, or used to train any model. Data flows only between Google, the operator's server and the operator's IMAP server.</p>
+
+<h2>Retention and deletion</h2>
+<p>Session history and logs are kept for the periods the operator configures. You can revoke the application's access at any time in your Google Account under Security, Third-party access, and delete all application data by deleting its database.</p>
+
+<h2>Google API Services User Data Policy</h2>
+<p>The application's use and transfer of information received from Google APIs adheres to the <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>, including the Limited Use requirements.</p>
+
+<h2>Contact</h2>
+<p>Questions about this policy: open an issue at <a href="https://github.com/TaliaMarine/gmail-to-imap-sync/issues">github.com/TaliaMarine/gmail-to-imap-sync</a>.</p>
+</body>
+</html>

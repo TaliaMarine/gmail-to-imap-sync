@@ -1,0 +1,3654 @@
+{
+  "components": {
+    "schemas": {
+      "AccountInput": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/AccountInput.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "destination_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "type": "object"
+      },
+      "AccountOverview": {
+        "additionalProperties": false,
+        "properties": {
+          "active_session": {
+            "$ref": "#/components/schemas/SessionSummary"
+          },
+          "authorised_at": {
+            "description": "When Google access was last granted",
+            "format": "date-time",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "destination_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "destination_name": {
+            "type": "string"
+          },
+          "failures": {
+            "$ref": "#/components/schemas/FailureCounts"
+          },
+          "gmail_address": {
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "initial_sync_completed": {
+            "type": "boolean"
+          },
+          "last_connection_check": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_session": {
+            "$ref": "#/components/schemas/SessionSummary"
+          },
+          "last_successful_sync": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "next_scheduled_sync": {
+            "description": "Absent when scheduling is off or the account is not ready",
+            "format": "date-time",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "unauthorised",
+              "ok",
+              "needs_reauth",
+              "disabled",
+              "error"
+            ],
+            "type": "string"
+          },
+          "status_error": {
+            "description": "Last connection error, if any",
+            "type": "string"
+          },
+          "sync_enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "failures",
+          "id",
+          "name",
+          "gmail_address",
+          "status",
+          "status_error",
+          "destination_name",
+          "sync_enabled",
+          "initial_sync_completed",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "AccountSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/AccountSummary.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "authorised_at": {
+            "description": "When Google access was last granted",
+            "format": "date-time",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "destination_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "destination_name": {
+            "type": "string"
+          },
+          "gmail_address": {
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "initial_sync_completed": {
+            "type": "boolean"
+          },
+          "last_connection_check": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_successful_sync": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "unauthorised",
+              "ok",
+              "needs_reauth",
+              "disabled",
+              "error"
+            ],
+            "type": "string"
+          },
+          "status_error": {
+            "description": "Last connection error, if any",
+            "type": "string"
+          },
+          "sync_enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "gmail_address",
+          "status",
+          "status_error",
+          "destination_name",
+          "sync_enabled",
+          "initial_sync_completed",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "AccountTest": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/AccountTest.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "gmail": {
+            "$ref": "#/components/schemas/GmailTest"
+          },
+          "imap": {
+            "$ref": "#/components/schemas/ConnectionTest"
+          }
+        },
+        "required": [
+          "gmail",
+          "imap"
+        ],
+        "type": "object"
+      },
+      "AccountsOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/AccountsOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AccountSummary"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ActivityDay": {
+        "additionalProperties": false,
+        "properties": {
+          "copied": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "day": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "failed": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "sessions": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "skipped": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "day",
+          "copied",
+          "skipped",
+          "failed",
+          "sessions"
+        ],
+        "type": "object"
+      },
+      "Check": {
+        "additionalProperties": false,
+        "properties": {
+          "error": {
+            "description": "Why the check failed",
+            "type": "string"
+          },
+          "ok": {
+            "description": "Whether the check passed",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "type": "object"
+      },
+      "ClearIgnoredInputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ClearIgnoredInputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "account_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "ClearIgnoredOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ClearIgnoredOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "cleared": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "cleared"
+        ],
+        "type": "object"
+      },
+      "ConnectionTest": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ConnectionTest.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "delimiter": {
+            "description": "Hierarchy delimiter reported by the server",
+            "type": "string"
+          },
+          "error": {
+            "description": "Why the test failed",
+            "type": "string"
+          },
+          "error_kind": {
+            "enum": [
+              "imap_auth",
+              "imap_connection",
+              "imap_folder",
+              "imap_append",
+              "parse"
+            ],
+            "type": "string"
+          },
+          "folders": {
+            "description": "Existing folders",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "type": "object"
+      },
+      "CurrentSyncOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/CurrentSyncOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "active": {
+            "type": "boolean"
+          },
+          "session": {
+            "$ref": "#/components/schemas/SessionSummary",
+            "description": "The active session, else the most recent one; absent when the account never synchronised"
+          }
+        },
+        "required": [
+          "active"
+        ],
+        "type": "object"
+      },
+      "Destination": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/Destination.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "account_count": {
+            "description": "Accounts delivering to this destination",
+            "format": "int64",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "hierarchy_delimiter": {
+            "description": "Learned from the server on a successful test",
+            "type": "string"
+          },
+          "host": {
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "password_set": {
+            "description": "Whether a password is stored (it is never returned)",
+            "type": "boolean"
+          },
+          "port": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "tls_mode": {
+            "enum": [
+              "implicit",
+              "starttls",
+              "none"
+            ],
+            "type": "string"
+          },
+          "tls_skip_verify": {
+            "description": "Certificates are not verified; shown as a warning",
+            "type": "boolean"
+          },
+          "username": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "host",
+          "port",
+          "tls_mode",
+          "tls_skip_verify",
+          "username",
+          "password_set",
+          "hierarchy_delimiter",
+          "enabled",
+          "account_count",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "DestinationConfig": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/DestinationConfig.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "host": {
+            "maxLength": 253,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "port": {
+            "format": "int32",
+            "maximum": 65535,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "tls_mode": {
+            "enum": [
+              "implicit",
+              "starttls",
+              "none"
+            ],
+            "type": "string"
+          },
+          "tls_skip_verify": {
+            "type": "boolean"
+          },
+          "username": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "host",
+          "port",
+          "tls_mode",
+          "tls_skip_verify",
+          "username",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "DestinationTestInputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/DestinationTestInputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "destination_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "host": {
+            "maxLength": 253,
+            "minLength": 1,
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 100,
+            "minLength": 1,
+            "type": "string"
+          },
+          "password": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "port": {
+            "format": "int32",
+            "maximum": 65535,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "tls_mode": {
+            "enum": [
+              "implicit",
+              "starttls",
+              "none"
+            ],
+            "type": "string"
+          },
+          "tls_skip_verify": {
+            "type": "boolean"
+          },
+          "username": {
+            "maxLength": 256,
+            "minLength": 1,
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "host",
+          "port",
+          "tls_mode",
+          "tls_skip_verify",
+          "username",
+          "enabled"
+        ],
+        "type": "object"
+      },
+      "DestinationsOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/DestinationsOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Destination"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "ErrorDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "location": {
+            "description": "Where the error occurred, e.g. 'body.items[3].tags' or 'path.thing-id'",
+            "type": "string"
+          },
+          "message": {
+            "description": "Error message text",
+            "type": "string"
+          },
+          "value": {
+            "description": "The value at the given location"
+          }
+        },
+        "type": "object"
+      },
+      "ErrorModel": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/ErrorModel.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "detail": {
+            "description": "A human-readable explanation specific to this occurrence of the problem.",
+            "examples": [
+              "Property foo is required but is missing."
+            ],
+            "type": "string"
+          },
+          "errors": {
+            "description": "Optional list of individual error details",
+            "items": {
+              "$ref": "#/components/schemas/ErrorDetail"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "instance": {
+            "description": "A URI reference that identifies the specific occurrence of the problem.",
+            "examples": [
+              "https://example.com/error-log/abc123"
+            ],
+            "format": "uri",
+            "type": "string"
+          },
+          "status": {
+            "description": "HTTP status code",
+            "examples": [
+              400
+            ],
+            "format": "int64",
+            "type": "integer"
+          },
+          "title": {
+            "description": "A short, human-readable summary of the problem type. This value should not change between occurrences of the error.",
+            "examples": [
+              "Bad Request"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "default": "about:blank",
+            "description": "A URI reference to human-readable documentation for the error.",
+            "examples": [
+              "https://example.com/errors/example"
+            ],
+            "format": "uri",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "Failure": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "attempt_count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "auto_retry": {
+            "description": "Whether later sessions retry this automatically; a manual retry is always possible",
+            "type": "boolean"
+          },
+          "category": {
+            "type": "string"
+          },
+          "completed_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "What the category means and what to do",
+            "type": "string"
+          },
+          "error_message": {
+            "type": "string"
+          },
+          "failed_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "first_failed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gmail_message_id": {
+            "type": "string"
+          },
+          "gmail_thread_id": {
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "intended_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "last_attempted_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_failed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_session_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "message_date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "next_retry_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "retry_exhausted": {
+            "type": "boolean"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "retrying",
+              "ignored"
+            ],
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "gmail_message_id",
+          "gmail_thread_id",
+          "subject",
+          "sender",
+          "intended_folders",
+          "completed_folders",
+          "failed_folders",
+          "category",
+          "description",
+          "auto_retry",
+          "error_message",
+          "status",
+          "retry_exhausted",
+          "attempt_count",
+          "first_failed_at",
+          "last_failed_at",
+          "last_attempted_at"
+        ],
+        "type": "object"
+      },
+      "FailureCounts": {
+        "additionalProperties": false,
+        "properties": {
+          "ignored": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "pending": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "retrying": {
+            "format": "int64",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "pending",
+          "retrying",
+          "ignored"
+        ],
+        "type": "object"
+      },
+      "FailureDetail": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/FailureDetail.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "account_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "attempt_count": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "auto_retry": {
+            "description": "Whether later sessions retry this automatically; a manual retry is always possible",
+            "type": "boolean"
+          },
+          "category": {
+            "type": "string"
+          },
+          "completed_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "description": {
+            "description": "What the category means and what to do",
+            "type": "string"
+          },
+          "error_history": {
+            "description": "Most recent attempts, newest first: time, category, message, session"
+          },
+          "error_message": {
+            "type": "string"
+          },
+          "failed_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "first_failed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "gmail_message_id": {
+            "type": "string"
+          },
+          "gmail_thread_id": {
+            "type": "string"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "intended_folders": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "last_attempted_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_failed_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "last_session_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "message_date": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "next_retry_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "recipients": {
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "retry_exhausted": {
+            "type": "boolean"
+          },
+          "sender": {
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "retrying",
+              "ignored"
+            ],
+            "type": "string"
+          },
+          "subject": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "recipients",
+          "error_history",
+          "id",
+          "account_id",
+          "gmail_message_id",
+          "gmail_thread_id",
+          "subject",
+          "sender",
+          "intended_folders",
+          "completed_folders",
+          "failed_folders",
+          "category",
+          "description",
+          "auto_retry",
+          "error_message",
+          "status",
+          "retry_exhausted",
+          "attempt_count",
+          "first_failed_at",
+          "last_failed_at",
+          "last_attempted_at"
+        ],
+        "type": "object"
+      },
+      "FailuresOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/FailuresOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/Failure"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "next_cursor": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "FlagMapping": {
+        "additionalProperties": false,
+        "properties": {
+          "folder_labels": {
+            "description": "System label IDs (STARRED, IMPORTANT, CATEGORY_*) that also get a folder",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "starred_as_flagged": {
+            "description": "STARRED becomes \\Flagged",
+            "type": "boolean"
+          },
+          "unread_as_seen": {
+            "description": "A message without the UNREAD label is flagged \\Seen",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "unread_as_seen",
+          "starred_as_flagged",
+          "folder_labels"
+        ],
+        "type": "object"
+      },
+      "GmailTest": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "description": "Address of the authorised Gmail account",
+            "type": "string"
+          },
+          "error": {
+            "type": "string"
+          },
+          "ok": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "ok"
+        ],
+        "type": "object"
+      },
+      "LabelView": {
+        "additionalProperties": false,
+        "properties": {
+          "collides_with": {
+            "description": "Other label IDs that map to the same folder",
+            "items": {
+              "type": "string"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "excluded": {
+            "type": "boolean"
+          },
+          "folder": {
+            "description": "Destination folder; empty when the label produces none",
+            "type": "string"
+          },
+          "id": {
+            "type": "string"
+          },
+          "last_seen_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "system": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "system",
+          "excluded",
+          "folder",
+          "collides_with"
+        ],
+        "type": "object"
+      },
+      "LabelsOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/LabelsOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/LabelView"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "Matcher": {
+        "additionalProperties": false,
+        "properties": {
+          "case_insensitive": {
+            "type": "boolean"
+          },
+          "kind": {
+            "type": "string"
+          },
+          "value": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "value"
+        ],
+        "type": "object"
+      },
+      "OAuthStartOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OAuthStartOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "url": {
+            "description": "Send the browser here to authorise the account with Google",
+            "type": "string"
+          }
+        },
+        "required": [
+          "url"
+        ],
+        "type": "object"
+      },
+      "OverviewOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/OverviewOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "accounts": {
+            "items": {
+              "$ref": "#/components/schemas/AccountOverview"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "activity": {
+            "description": "Last 14 days, oldest first, days without sessions included",
+            "items": {
+              "$ref": "#/components/schemas/ActivityDay"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "pending_failures": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "recent_failures": {
+            "items": {
+              "$ref": "#/components/schemas/Failure"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "recent_sessions": {
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "accounts",
+          "activity",
+          "recent_sessions",
+          "recent_failures",
+          "pending_failures"
+        ],
+        "type": "object"
+      },
+      "RetryManyInputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/RetryManyInputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "account_id": {
+            "description": "With all: only this account",
+            "format": "uuid",
+            "type": "string"
+          },
+          "all": {
+            "description": "Retry every pending failure instead",
+            "type": "boolean"
+          },
+          "ids": {
+            "description": "Failures to retry",
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 1000,
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "type": "object"
+      },
+      "RetryOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/RetryOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "reset": {
+            "description": "Failures made eligible for retry",
+            "format": "int64",
+            "type": "integer"
+          },
+          "sessions": {
+            "items": {
+              "$ref": "#/components/schemas/RetrySession"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "reset",
+          "sessions"
+        ],
+        "type": "object"
+      },
+      "RetrySession": {
+        "additionalProperties": false,
+        "properties": {
+          "account_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "queued": {
+            "description": "A new retry session was queued",
+            "type": "boolean"
+          },
+          "reason": {
+            "description": "Why no new session was queued, e.g. one is already active (it picks the failures up automatically)",
+            "type": "string"
+          },
+          "session_id": {
+            "format": "uuid",
+            "type": "string"
+          }
+        },
+        "required": [
+          "account_id",
+          "queued"
+        ],
+        "type": "object"
+      },
+      "SessionEvent": {
+        "additionalProperties": false,
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "message": {
+            "type": "string"
+          },
+          "metadata": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "severity": {
+            "enum": [
+              "debug",
+              "info",
+              "warning",
+              "error"
+            ],
+            "type": "string"
+          },
+          "type": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "type",
+          "severity",
+          "message",
+          "metadata",
+          "created_at"
+        ],
+        "type": "object"
+      },
+      "SessionEventsOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SessionEventsOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SessionEvent"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "SessionSummary": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SessionSummary.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "account_id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "api_requests": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "bytes_copied": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "cancel_requested": {
+            "type": "boolean"
+          },
+          "copied": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "current_folder": {
+            "description": "Folder being delivered to",
+            "type": "string"
+          },
+          "discovered": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "duration_ms": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "ending_history_id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "failed": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "finished_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "folders_created": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "id": {
+            "format": "uuid",
+            "type": "string"
+          },
+          "last_error": {
+            "type": "string"
+          },
+          "phase": {
+            "description": "Current phase while running; empty otherwise",
+            "type": "string"
+          },
+          "processed": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "recovered": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "skipped": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "started_at": {
+            "format": "date-time",
+            "type": "string"
+          },
+          "starting_history_id": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "queued",
+              "running",
+              "completed",
+              "completed_with_errors",
+              "failed",
+              "cancelled",
+              "abandoned"
+            ],
+            "type": "string"
+          },
+          "sync_type": {
+            "enum": [
+              "initial",
+              "incremental",
+              "reconcile",
+              "retry"
+            ],
+            "type": "string"
+          },
+          "trigger_type": {
+            "enum": [
+              "scheduled",
+              "manual",
+              "initial",
+              "retry",
+              "recovery"
+            ],
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "account_id",
+          "status",
+          "trigger_type",
+          "sync_type",
+          "phase",
+          "current_folder",
+          "created_at",
+          "discovered",
+          "processed",
+          "copied",
+          "skipped",
+          "failed",
+          "recovered",
+          "folders_created",
+          "api_requests",
+          "bytes_copied",
+          "last_error",
+          "cancel_requested"
+        ],
+        "type": "object"
+      },
+      "SessionsOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SessionsOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SessionSummary"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "next_cursor": {
+            "description": "Pass as cursor to get the next page; absent on the last page",
+            "type": "string"
+          }
+        },
+        "required": [
+          "items"
+        ],
+        "type": "object"
+      },
+      "Settings": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/Settings.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "configured": {
+            "description": "Whether Google sign-in for accounts is set up",
+            "type": "boolean"
+          },
+          "event_retention_days": {
+            "format": "int32",
+            "type": "integer"
+          },
+          "notification_webhook_set": {
+            "description": "Whether a notification webhook is stored (the URL is never returned)",
+            "type": "boolean"
+          },
+          "oauth_client_id": {
+            "description": "Client ID of your Google OAuth client",
+            "type": "string"
+          },
+          "oauth_client_secret_set": {
+            "description": "Whether a client secret is stored (it is never returned)",
+            "type": "boolean"
+          },
+          "redirect_uri": {
+            "description": "Register this redirect URI in the Google OAuth client",
+            "type": "string"
+          },
+          "session_retention_days": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "oauth_client_id",
+          "oauth_client_secret_set",
+          "redirect_uri",
+          "configured",
+          "session_retention_days",
+          "event_retention_days",
+          "notification_webhook_set"
+        ],
+        "type": "object"
+      },
+      "SettingsUpdate": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SettingsUpdate.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "event_retention_days": {
+            "format": "int32",
+            "maximum": 3650,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "notification_webhook": {
+            "maxLength": 2048,
+            "type": "string"
+          },
+          "oauth_client_id": {
+            "maxLength": 256,
+            "type": "string"
+          },
+          "oauth_client_secret": {
+            "maxLength": 512,
+            "type": "string"
+          },
+          "session_retention_days": {
+            "format": "int32",
+            "maximum": 3650,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "oauth_client_id",
+          "session_retention_days",
+          "event_retention_days"
+        ],
+        "type": "object"
+      },
+      "SyncRequest": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SyncRequest.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "after": {
+            "description": "Reconcile only: re-scan messages received on or after this date",
+            "format": "date",
+            "type": "string"
+          },
+          "label_id": {
+            "description": "Reconcile only: limit the re-scan to one Gmail label",
+            "type": "string"
+          },
+          "type": {
+            "default": "incremental",
+            "enum": [
+              "incremental",
+              "reconcile"
+            ],
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
+      "SyncSettings": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SyncSettings.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "archive_folder": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "batch_size": {
+            "format": "int32",
+            "maximum": 500,
+            "minimum": 1,
+            "type": "integer"
+          },
+          "enabled": {
+            "description": "Run scheduled synchronisation",
+            "type": "boolean"
+          },
+          "excluded_labels": {
+            "items": {
+              "$ref": "#/components/schemas/Matcher"
+            },
+            "type": [
+              "array",
+              "null"
+            ]
+          },
+          "flag_mapping": {
+            "$ref": "#/components/schemas/FlagMapping"
+          },
+          "inbox_folder": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "initial_sync_after": {
+            "description": "Only import messages received on or after this date (first sync)",
+            "format": "date",
+            "type": "string"
+          },
+          "label_mapping": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "description": "Gmail label ID to destination folder",
+            "type": "object"
+          },
+          "rate_fraction": {
+            "description": "Share of Gmail's per-user quota to use",
+            "format": "float",
+            "maximum": 1,
+            "minimum": 0.05,
+            "type": "number"
+          },
+          "retry_max_attempts": {
+            "format": "int32",
+            "maximum": 50,
+            "minimum": 0,
+            "type": "integer"
+          },
+          "schedule_interval_seconds": {
+            "format": "int32",
+            "maximum": 2592000,
+            "minimum": 300,
+            "type": "integer"
+          },
+          "sent_folder": {
+            "maxLength": 255,
+            "minLength": 1,
+            "type": "string"
+          },
+          "subscribe_folders": {
+            "type": "boolean"
+          },
+          "worker_count": {
+            "format": "int32",
+            "maximum": 64,
+            "minimum": 1,
+            "type": "integer"
+          }
+        },
+        "required": [
+          "enabled",
+          "schedule_interval_seconds",
+          "archive_folder",
+          "sent_folder",
+          "inbox_folder",
+          "excluded_labels",
+          "label_mapping",
+          "flag_mapping",
+          "subscribe_folders",
+          "worker_count",
+          "rate_fraction",
+          "batch_size",
+          "retry_max_attempts"
+        ],
+        "type": "object"
+      },
+      "SyncStartOutputBody": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SyncStartOutputBody.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "already_active": {
+            "description": "A session was already queued or running; it is returned instead of a new one",
+            "type": "boolean"
+          },
+          "session": {
+            "$ref": "#/components/schemas/SessionSummary"
+          }
+        },
+        "required": [
+          "session",
+          "already_active"
+        ],
+        "type": "object"
+      },
+      "SystemStatus": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/SystemStatus.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "database": {
+            "$ref": "#/components/schemas/Check",
+            "description": "PostgreSQL connectivity"
+          },
+          "last_successful_session": {
+            "description": "When a session last finished without errors",
+            "format": "date-time",
+            "type": "string"
+          },
+          "mode": {
+            "description": "Process mode: all, web or worker",
+            "type": "string"
+          },
+          "oauth_needs_reauth": {
+            "description": "Accounts whose Google access must be renewed",
+            "format": "int64",
+            "type": "integer"
+          },
+          "sessions_queued": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "sessions_running": {
+            "format": "int64",
+            "type": "integer"
+          },
+          "uptime_seconds": {
+            "description": "Seconds since this process started",
+            "format": "int64",
+            "type": "integer"
+          },
+          "version": {
+            "description": "Application version",
+            "type": "string"
+          }
+        },
+        "required": [
+          "version",
+          "mode",
+          "uptime_seconds",
+          "database",
+          "oauth_needs_reauth",
+          "sessions_queued",
+          "sessions_running"
+        ],
+        "type": "object"
+      },
+      "UserInfo": {
+        "additionalProperties": false,
+        "properties": {
+          "$schema": {
+            "description": "A URL to the JSON Schema for this object.",
+            "examples": [
+              "https://example.com/schemas/UserInfo.json"
+            ],
+            "format": "uri",
+            "readOnly": true,
+            "type": "string"
+          },
+          "can_sign_out": {
+            "description": "Whether the session can be ended from the UI (OIDC sign-in)",
+            "type": "boolean"
+          },
+          "email": {
+            "description": "Email address",
+            "type": "string"
+          },
+          "name": {
+            "description": "Display name",
+            "type": "string"
+          },
+          "preferred_username": {
+            "description": "Preferred username",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "name",
+          "preferred_username",
+          "can_sign_out"
+        ],
+        "type": "object"
+      }
+    }
+  },
+  "info": {
+    "description": "Selectively replicate Gmail messages into a self-hosted IMAP server.",
+    "title": "Gmail Archive Sync API",
+    "version": "1.0.0"
+  },
+  "openapi": "3.1.0",
+  "paths": {
+    "/api/v1/accounts": {
+      "get": {
+        "operationId": "list-accounts",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List Gmail accounts",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "post": {
+        "operationId": "create-account",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummary"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Create a Gmail account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}": {
+      "delete": {
+        "description": "Removes the account, its settings, sessions and failure records. Nothing is deleted in Gmail or on the IMAP server.",
+        "operationId": "delete-account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Remove a Gmail account",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "get": {
+        "operationId": "get-account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummary"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get a Gmail account",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "put": {
+        "operationId": "update-account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AccountInput"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountSummary"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update a Gmail account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/folder-preview": {
+      "post": {
+        "description": "Does not save anything. Shows excluded labels and labels that collide on one folder.",
+        "operationId": "preview-folders",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Preview the folders that candidate settings would produce",
+        "tags": [
+          "Labels"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/labels": {
+      "get": {
+        "operationId": "list-labels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List Gmail labels with their destination folders",
+        "tags": [
+          "Labels"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/labels/refresh": {
+      "post": {
+        "operationId": "refresh-labels",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabelsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Reload the labels from Gmail",
+        "tags": [
+          "Labels"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/oauth/start": {
+      "post": {
+        "description": "Returns the Google consent URL. Redirect the browser there; Google returns to /oauth/callback.",
+        "operationId": "start-account-oauth",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OAuthStartOutputBody"
+                }
+              }
+            },
+            "description": "OK",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Start authorising an account with Google",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/sync": {
+      "post": {
+        "description": "Queues a session. If one is already queued or running it is returned with already_active set.",
+        "operationId": "start-sync",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncStartOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Start a synchronisation",
+        "tags": [
+          "Sync"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/sync-settings": {
+      "get": {
+        "operationId": "get-sync-settings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncSettings"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get the synchronisation settings of an account",
+        "tags": [
+          "Accounts"
+        ]
+      },
+      "put": {
+        "operationId": "update-sync-settings",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SyncSettings"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SyncSettings"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update the synchronisation settings of an account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/sync/cancel": {
+      "post": {
+        "description": "Graceful: the message in flight finishes and the checkpoint is saved.",
+        "operationId": "cancel-sync",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSummary"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Cancel the active synchronisation",
+        "tags": [
+          "Sync"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/sync/current": {
+      "get": {
+        "operationId": "get-current-sync",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CurrentSyncOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get the active or most recent synchronisation",
+        "tags": [
+          "Sync"
+        ]
+      }
+    },
+    "/api/v1/accounts/{id}/test": {
+      "post": {
+        "operationId": "test-account",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AccountTest"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Test the Gmail and IMAP connections of an account",
+        "tags": [
+          "Accounts"
+        ]
+      }
+    },
+    "/api/v1/destinations": {
+      "get": {
+        "operationId": "list-destinations",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DestinationsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List destinations",
+        "tags": [
+          "Destinations"
+        ]
+      },
+      "post": {
+        "operationId": "create-destination",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DestinationConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            },
+            "description": "Created"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Create a destination",
+        "tags": [
+          "Destinations"
+        ]
+      }
+    },
+    "/api/v1/destinations/test": {
+      "post": {
+        "operationId": "test-destination-config",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DestinationTestInputBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionTest"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Test an unsaved destination configuration",
+        "tags": [
+          "Destinations"
+        ]
+      }
+    },
+    "/api/v1/destinations/{id}": {
+      "delete": {
+        "operationId": "delete-destination",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "No Content"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Delete a destination",
+        "tags": [
+          "Destinations"
+        ]
+      },
+      "get": {
+        "operationId": "get-destination",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get a destination",
+        "tags": [
+          "Destinations"
+        ]
+      },
+      "put": {
+        "operationId": "update-destination",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DestinationConfig"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Destination"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update a destination",
+        "tags": [
+          "Destinations"
+        ]
+      }
+    },
+    "/api/v1/destinations/{id}/test": {
+      "post": {
+        "operationId": "test-destination",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ConnectionTest"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Test a stored destination",
+        "tags": [
+          "Destinations"
+        ]
+      }
+    },
+    "/api/v1/failures": {
+      "get": {
+        "operationId": "list-failures",
+        "parameters": [
+          {
+            "explode": false,
+            "in": "query",
+            "name": "account",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "pending",
+                "retrying",
+                "ignored"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Error category, e.g. imap_append",
+            "explode": false,
+            "in": "query",
+            "name": "category",
+            "schema": {
+              "description": "Error category, e.g. imap_append",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Matches subject or sender",
+            "explode": false,
+            "in": "query",
+            "name": "search",
+            "schema": {
+              "description": "Matches subject or sender",
+              "maxLength": 200,
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "format": "int64",
+              "maximum": 200,
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailuresOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List failed messages",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/clear-ignored": {
+      "post": {
+        "operationId": "clear-ignored-failures",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ClearIgnoredInputBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ClearIgnoredOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Remove all ignored failure records",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/retry": {
+      "post": {
+        "operationId": "retry-failures",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetryManyInputBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Retry several failed messages",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/{id}": {
+      "get": {
+        "operationId": "get-failure",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailureDetail"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get a failed message with its error history",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/{id}/ignore": {
+      "post": {
+        "operationId": "ignore-failure",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailureDetail"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Ignore a failed message",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/{id}/retry": {
+      "post": {
+        "operationId": "retry-failure",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Retry one failed message",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/failures/{id}/unignore": {
+      "post": {
+        "operationId": "unignore-failure",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FailureDetail"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Stop ignoring a failed message",
+        "tags": [
+          "Failures"
+        ]
+      }
+    },
+    "/api/v1/me": {
+      "get": {
+        "operationId": "get-me",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserInfo"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get the signed-in user",
+        "tags": [
+          "User"
+        ]
+      }
+    },
+    "/api/v1/overview": {
+      "get": {
+        "operationId": "get-overview",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OverviewOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Dashboard data",
+        "tags": [
+          "Overview"
+        ]
+      }
+    },
+    "/api/v1/sessions": {
+      "get": {
+        "operationId": "list-sessions",
+        "parameters": [
+          {
+            "description": "Only sessions of this account",
+            "explode": false,
+            "in": "query",
+            "name": "account",
+            "schema": {
+              "description": "Only sessions of this account",
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "status",
+            "schema": {
+              "enum": [
+                "queued",
+                "running",
+                "completed",
+                "completed_with_errors",
+                "failed",
+                "cancelled",
+                "abandoned"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "trigger",
+            "schema": {
+              "enum": [
+                "scheduled",
+                "manual",
+                "initial",
+                "retry",
+                "recovery"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "explode": false,
+            "in": "query",
+            "name": "type",
+            "schema": {
+              "enum": [
+                "initial",
+                "incremental",
+                "reconcile",
+                "retry"
+              ],
+              "type": "string"
+            }
+          },
+          {
+            "description": "Created at or after (RFC 3339)",
+            "explode": false,
+            "in": "query",
+            "name": "from",
+            "schema": {
+              "description": "Created at or after (RFC 3339)",
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Created before (RFC 3339)",
+            "explode": false,
+            "in": "query",
+            "name": "to",
+            "schema": {
+              "description": "Created before (RFC 3339)",
+              "format": "date-time",
+              "type": "string"
+            }
+          },
+          {
+            "description": "next_cursor of the previous page",
+            "explode": false,
+            "in": "query",
+            "name": "cursor",
+            "schema": {
+              "description": "next_cursor of the previous page",
+              "type": "string"
+            }
+          },
+          {
+            "description": "Page size, default 50",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "description": "Page size, default 50",
+              "format": "int64",
+              "maximum": 200,
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List synchronisation sessions, newest first",
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/api/v1/sessions/{id}": {
+      "get": {
+        "operationId": "get-session",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionSummary"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get a synchronisation session",
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/api/v1/sessions/{id}/events": {
+      "get": {
+        "operationId": "list-session-events",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "description": "Only events with a greater id",
+            "explode": false,
+            "in": "query",
+            "name": "after",
+            "schema": {
+              "description": "Only events with a greater id",
+              "format": "int64",
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          {
+            "description": "Default 200",
+            "explode": false,
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "description": "Default 200",
+              "format": "int64",
+              "maximum": 1000,
+              "minimum": 0,
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SessionEventsOutputBody"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "List the aggregated events of a session",
+        "tags": [
+          "Sessions"
+        ]
+      }
+    },
+    "/api/v1/settings": {
+      "get": {
+        "operationId": "get-settings",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Settings"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get application settings",
+        "tags": [
+          "Settings"
+        ]
+      },
+      "put": {
+        "operationId": "update-settings",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SettingsUpdate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Settings"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Update application settings",
+        "tags": [
+          "Settings"
+        ]
+      }
+    },
+    "/api/v1/system/status": {
+      "get": {
+        "operationId": "get-system-status",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SystemStatus"
+                }
+              }
+            },
+            "description": "OK"
+          },
+          "default": {
+            "content": {
+              "application/problem+json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorModel"
+                }
+              }
+            },
+            "description": "Error"
+          }
+        },
+        "summary": "Get application and dependency status",
+        "tags": [
+          "System"
+        ]
+      }
+    }
+  }
+}

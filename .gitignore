@@ -1,0 +1,12 @@
+.idea/
+.DS_Store
+bin/
+*.test
+*.out
+
+# Frontend
+web/node_modules/
+web/dist/
+
+# Local development state (encryption key for `just real`)
+.dev/

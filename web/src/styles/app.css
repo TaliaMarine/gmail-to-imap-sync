@@ -1,0 +1,46 @@
+:root {
+  --gas-sans: 'Schibsted Grotesk', system-ui, -apple-system, sans-serif;
+  --gas-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+.v-application {
+  font-family: var(--gas-sans) !important;
+  font-size: 0.9375rem;
+  letter-spacing: 0;
+}
+
+/* Real identifiers only: message ids, history ids, folder paths. */
+.mono {
+  font-family: var(--gas-mono);
+  font-size: 0.8125rem;
+}
+
+.tnum { font-variant-numeric: tabular-nums; }
+
+.v-application .text-h5,
+.v-application .text-h6 {
+  font-family: var(--gas-sans);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+:focus-visible {
+  outline: 2px solid rgb(var(--v-theme-primary));
+  outline-offset: 2px;
+}
+
+.gas-rule-r { border-right: 1px solid rgb(var(--v-border-color)); }
+.gas-rule-b { border-bottom: 1px solid rgb(var(--v-border-color)); }
+.gas-muted { color: rgb(var(--v-theme-on-surface-variant)); }
+.gas-page { max-width: 1200px; margin: 0 auto; padding: 24px 24px 48px; }
+.gas-page > h1 { margin-bottom: 4px; }
+.gas-page .lead { max-width: 65ch; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

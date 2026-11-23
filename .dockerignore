@@ -1,0 +1,9 @@
+.git
+.github
+.idea
+bin
+web/node_modules
+web/dist
+chart
+examples
+*.md

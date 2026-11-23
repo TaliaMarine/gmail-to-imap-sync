@@ -1,0 +1,80 @@
+{{- if .Values.worker.enabled }}
+{{- include "gmail-archive-sync.validate" . }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}-worker
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  replicas: {{ .Values.worker.replicaCount }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "gmail-archive-sync.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: worker
+  template:
+    metadata:
+      labels:
+        {{- include "gmail-archive-sync.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: worker
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "gmail-archive-sync.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: gmail-archive-sync
+          image: "{{ include "gmail-archive-sync.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--mode", "worker"]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          # The worker exposes only health and metrics on the same port.
+          ports:
+            - { name: http, containerPort: {{ .Values.http.port }}, protocol: TCP }
+          env:
+            {{- include "gmail-archive-sync.commonEnv" . | nindent 12 }}
+          livenessProbe:
+            httpGet: { path: /health/live, port: http }
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: { path: /health/ready, port: http }
+            periodSeconds: 5
+          startupProbe:
+            httpGet: { path: /health/ready, port: http }
+            failureThreshold: 60
+            periodSeconds: 5
+          resources:
+            {{- toYaml (default .Values.resources .Values.worker.resources) | nindent 12 }}
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+{{- end }}

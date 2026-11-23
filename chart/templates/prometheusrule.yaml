@@ -1,0 +1,33 @@
+{{- if .Values.prometheusRule.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+    {{- with .Values.prometheusRule.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+spec:
+  groups:
+    - name: gmail-archive-sync
+      rules:
+        - alert: GmailSyncStale
+          expr: time() - gmailsync_last_success_timestamp_seconds > {{ include "gmail-archive-sync.seconds" .Values.prometheusRule.syncStaleAfter }}
+          for: 10m
+          labels: { severity: warning }
+          annotations:
+            summary: "No successful Gmail sync for account {{ "{{ $labels.account }}" }}"
+        - alert: GmailSyncNeedsReauthorisation
+          expr: gmailsync_oauth_needs_reauth > 0
+          for: 5m
+          labels: { severity: warning }
+          annotations:
+            summary: "Google access was revoked or expired; reauthorise the account in the UI"
+        - alert: GmailSyncFailuresGrowing
+          expr: delta(gmailsync_pending_failures[1h]) > 0 and gmailsync_pending_failures > 10
+          for: 1h
+          labels: { severity: warning }
+          annotations:
+            summary: "Failed messages keep accumulating"
+{{- end }}

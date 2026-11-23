@@ -1,0 +1,134 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  backend:
+    name: Backend (Go)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - run: go build ./...
+      - run: go vet ./...
+      - run: gofmt -l . | tee /tmp/gofmt.out && test ! -s /tmp/gofmt.out
+      - name: Generated SQL code is up to date
+        run: |
+          go run github.com/sqlc-dev/sqlc/cmd/sqlc@v1.31.1 generate
+          git diff --exit-code -- internal/db/store
+      - run: go test ./... -race
+
+  # Needs Docker (testcontainers starts real PostgreSQL and Dovecot),
+  # which ubuntu-latest provides.
+  integration:
+    name: Integration (PostgreSQL + Dovecot)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      - run: go test -tags integration -race -timeout 20m ./...
+
+  govulncheck:
+    name: govulncheck
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+      # TODO: pin govulncheck to a fixed version instead of @latest.
+      - run: go run golang.org/x/vuln/cmd/govulncheck@latest ./...
+
+  frontend:
+    name: Frontend (Vue)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: "26"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm test
+      - name: Generated API client is up to date
+        run: |
+          npm run generate:api
+          git diff --exit-code -- src/api
+      - run: npm run build
+
+  helm:
+    name: Helm chart
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: azure/setup-helm@2f5e7bc67f1f9972ab16657bb795f36d8f04de0e # v5.1.0
+      - name: Lint
+        run: |
+          helm lint chart \
+            --set database.existingSecret.name=db \
+            --set oidc.issuerUrl=https://auth.example.com/application/o/gmail-archive-sync/ \
+            --set oidc.clientId=x --set gateway.host=sync.example.com
+      - name: Render the default and the optional configurations
+        run: |
+          set -euo pipefail
+          common="--set database.existingSecret.name=db"
+          oidc="--set oidc.issuerUrl=https://auth.example.com/application/o/gmail-archive-sync/ --set oidc.clientId=x --set gateway.host=sync.example.com"
+          # development: no auth, no route
+          helm template gas chart $common --set authDisabled=true --set gateway.enabled=false
+          # default single Deployment (--mode all)
+          helm template gas chart $common $oidc
+          # web/worker split
+          helm template gas chart $common $oidc --set worker.enabled=true --set replicaCount=2 --set worker.replicaCount=2
+          # all optional resources
+          helm template gas chart $common $oidc \
+            --set worker.enabled=true \
+            --set networkPolicy.enabled=true \
+            --set serviceMonitor.enabled=true \
+            --set prometheusRule.enabled=true \
+            --set encryption.existingSecret.name=enc
+      - name: Missing database configuration fails
+        run: |
+          if helm template gas chart --set authDisabled=true --set gateway.enabled=false 2>/tmp/err; then
+            echo "::error::expected helm template to fail without database.existingSecret.name"; exit 1
+          fi
+          grep -q "database.existingSecret" /tmp/err
+      - name: OIDC without a gateway host fails
+        run: |
+          if helm template gas chart --set database.existingSecret.name=db --set oidc.issuerUrl=https://a/ --set oidc.clientId=x --set gateway.enabled=false 2>/tmp/err; then
+            echo "::error::expected helm template to fail without gateway.host"; exit 1
+          fi
+          grep -q "gateway.host" /tmp/err
+
+  docker:
+    name: Docker build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: docker/setup-buildx-action@f87e5991a6d7451dcb8d9637bfbc97413f497069 # v4.4.1
+      - uses: docker/build-push-action@c3c9e263c25d99ce0380d002d59b67737d91b0dc # v7.4.0
+        with:
+          context: .
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

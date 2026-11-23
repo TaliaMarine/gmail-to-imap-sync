@@ -1,0 +1,83 @@
+{{- include "gmail-archive-sync.validate" . }}
+{{- $split := .Values.worker.enabled }}
+{{- /* The web Deployment always carries component=web. In the default
+single-process mode it also runs the worker (--mode all). */ -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  replicas: {{ .Values.replicaCount }}
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      {{- include "gmail-archive-sync.selectorLabels" . | nindent 6 }}
+      app.kubernetes.io/component: web
+  template:
+    metadata:
+      labels:
+        {{- include "gmail-archive-sync.selectorLabels" . | nindent 8 }}
+        app.kubernetes.io/component: web
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    spec:
+      serviceAccountName: {{ include "gmail-archive-sync.serviceAccountName" . }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: gmail-archive-sync
+          image: "{{ include "gmail-archive-sync.image" . }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args: ["--mode", {{ ternary "web" "all" $split | quote }}]
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          ports:
+            - { name: http, containerPort: {{ .Values.http.port }}, protocol: TCP }
+          env:
+            {{- include "gmail-archive-sync.commonEnv" . | nindent 12 }}
+            {{- include "gmail-archive-sync.webEnv" . | nindent 12 }}
+          livenessProbe:
+            httpGet: { path: /health/live, port: http }
+            periodSeconds: 10
+          readinessProbe:
+            httpGet: { path: /health/ready, port: http }
+            periodSeconds: 5
+          # Migrations run at startup under an advisory lock; readiness stays
+          # false until they finish.
+          startupProbe:
+            httpGet: { path: /health/ready, port: http }
+            failureThreshold: 60
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            - { name: tmp, mountPath: /tmp }
+      volumes:
+        - name: tmp
+          emptyDir: {}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

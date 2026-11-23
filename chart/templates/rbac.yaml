@@ -1,0 +1,42 @@
+{{- /* The app talks to the Kubernetes API only to create, once, the Secrets that
+hold its own keys: the session-cookie key (with OIDC) and the encryption key
+ring. Nothing else is readable or writable. */ -}}
+{{- $session := and .Values.oidc.issuerUrl .Values.sessionKey.autoGenerate }}
+{{- $encryption := and (not .Values.encryption.existingSecret.name) .Values.encryption.autoGenerate }}
+{{- if or $session $encryption }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: [secrets]
+    verbs: [create]
+  - apiGroups: [""]
+    resources: [secrets]
+    resourceNames:
+      {{- if $session }}
+      - {{ include "gmail-archive-sync.sessionSecretName" . | quote }}
+      {{- end }}
+      {{- if $encryption }}
+      - {{ include "gmail-archive-sync.encryptionSecretName" . | quote }}
+      {{- end }}
+    verbs: [get]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "gmail-archive-sync.fullname" . }}
+subjects:
+  - kind: ServiceAccount
+    name: {{ include "gmail-archive-sync.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end }}

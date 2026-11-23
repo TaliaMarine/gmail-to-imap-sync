@@ -1,0 +1,22 @@
+# Local services for trying the application against a real Gmail account:
+#   PostgreSQL on :15432 and a throwaway Dovecot (IMAP, no TLS) on :1143.
+# Nothing here is for production. `just real-down` removes both, including their data.
+name: gmailsync-dev
+services:
+  postgres:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: gas
+      POSTGRES_PASSWORD: gas
+      POSTGRES_DB: gas
+    ports: ["127.0.0.1:15432:5432"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U gas"]
+      interval: 2s
+      retries: 30
+  dovecot:
+    image: dovecot/dovecot:2.4.5
+    ports: ["127.0.0.1:1143:143"]
+    volumes:
+      - ./dev/dovecot/dovecot.conf:/etc/dovecot/dovecot.conf:ro
+      - ./dev/dovecot/users:/etc/dovecot/users:ro

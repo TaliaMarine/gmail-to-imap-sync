@@ -1,0 +1,160 @@
+# Default values for gmail-archive-sync.
+
+# One Deployment runs the web UI and the sync worker in a single process
+# (--mode all). Replicas are safe: PostgreSQL guarantees one active sync
+# session per account. Set worker.enabled=true to split web and worker.
+replicaCount: 1
+
+image:
+  repository: ghcr.io/taliamarine/gmail-to-imap-sync
+  tag: "" # defaults to Chart.appVersion
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  create: true
+  annotations: {}
+  name: ""
+
+# --- Web UI and API (ClusterIP service behind a gateway) ---
+http:
+  port: 1080
+
+# Gateway API HTTPRoute for the web UI. TLS ends at the gateway.
+gateway:
+  enabled: true
+  host: "" # required when enabled, e.g. sync.example.com
+  annotations: {}
+  parentRefs:
+    - name: default-gateway
+      namespace: envoy-gateway-system
+      sectionName: https
+
+# --- Process split ---
+# false: one Deployment, --mode all.
+# true:  `replicaCount` web pods (--mode web) plus `worker.replicaCount`
+#        worker pods (--mode worker).
+worker:
+  enabled: false
+  replicaCount: 1
+  resources: {}
+
+# --- PostgreSQL (existing cluster, never bundled) ---
+# A Secret holding the connection string, e.g.
+#   postgres://user:pass@host:5432/gmailsync?sslmode=verify-full
+database:
+  existingSecret:
+    name: "" # required
+    key: dsn
+
+# Without OIDC the UI would be open to everyone who can reach it. Set this to
+# true to deliberately run with no authentication at all (development only).
+authDisabled: false
+
+# --- OIDC sign-in (Authorization Code + PKCE, no client secret) ---
+# Create a *public* client in your identity provider with the redirect URI
+# https://<gateway.host>/auth/callback.
+oidc:
+  issuerUrl: ""
+  clientId: ""
+  # Only for confidential clients; leave unset for the usual public client.
+  clientSecretRef:
+    name: ""
+    key: ""
+  # Who may sign in. Leave both empty only if every user of your identity
+  # provider should be able to administer the application. A user matching
+  # either list is let in; "@example.com" allows a whole domain.
+  allowedEmails: []
+  allowedGroups: []
+
+# Key that signs session cookies. By default the app creates the Secret itself
+# on first start (the chart never renders secret material, so GitOps tools see
+# no drift). Set autoGenerate=false to supply your own Secret.
+sessionKey:
+  autoGenerate: true
+  secretName: "" # defaults to <fullname>-session
+  key: key
+
+# Key ring that encrypts OAuth tokens and IMAP passwords in PostgreSQL.
+# Default: the app creates a Secret on first start. Losing it means
+# re-entering every credential, so back it up.
+# Alternatively point existingSecret at a Secret whose value is
+# "<id>:<base64 key>[,<id>:<base64 key>...]" (first entry is the active key),
+# which also enables key rotation.
+encryption:
+  autoGenerate: true
+  secretName: "" # defaults to <fullname>-encryption
+  key: key
+  existingSecret:
+    name: ""
+    key: keys
+
+env:
+  LOG_LEVEL: info
+  MAX_CONCURRENT_SYNCS: "2" # sessions (accounts) one pod runs at once
+  LOG_FORMAT: json
+
+extraEnv: []
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 192Mi
+  limits:
+    cpu: "1"
+    # Sized for worker concurrency: roughly workers x max message size
+    # (50 MB) of buffered message data on top of the baseline.
+    memory: 768Mi
+
+# Allow time for in-flight messages to finish on SIGTERM.
+terminationGracePeriodSeconds: 60
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext:
+  runAsNonRoot: true
+  runAsUser: 65532
+  runAsGroup: 65532
+  fsGroup: 65532
+  seccompProfile:
+    type: RuntimeDefault
+
+securityContext:
+  allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: true
+  capabilities:
+    drop: [ALL]
+
+nodeSelector: {}
+tolerations: []
+affinity: {}
+
+# --- Optional resources ---
+# Restricts egress to DNS, PostgreSQL, IMAP and HTTPS (Gmail API, OIDC, the
+# Kubernetes API). Destinations are limited by port only; tighten with
+# `egressTo` (a list of NetworkPolicy peers, applied to every rule) or add
+# `extraEgress`. A CIDR/FQDN-based policy depends on your CNI.
+networkPolicy:
+  enabled: false
+  ingressFrom: [] # NetworkPolicy peers allowed to reach the web port; empty = any
+  egressPorts:
+    postgres: 5432
+    imap: [143, 993]
+    https: 443
+  egressTo: [] # peers; empty = any
+  extraEgress: []
+
+# Prometheus Operator resources.
+serviceMonitor:
+  enabled: false
+  interval: 30s
+  labels: {}
+
+prometheusRule:
+  enabled: false
+  labels: {}
+  syncStaleAfter: 6h # alert when an account has no successful sync for this long

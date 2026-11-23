@@ -1,0 +1,38 @@
+# ArgoCD Application installing the chart from its OCI registry.
+# Create the PostgreSQL connection Secret first (it is not part of the chart):
+#   kubectl -n gmail-archive-sync create secret generic gmail-archive-sync-db \
+#     --from-literal=dsn='postgres://user:pass@host:5432/gmailsync?sslmode=verify-full'
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: gmail-archive-sync
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: ghcr.io/taliamarine/charts # OCI registry, no oci:// prefix
+    chart: gmail-archive-sync
+    targetRevision: 0.1.0
+    helm:
+      valuesObject:
+        database:
+          existingSecret:
+            name: gmail-archive-sync-db
+        gateway:
+          host: sync.example.com
+        oidc:
+          issuerUrl: https://auth.example.com/application/o/gmail-archive-sync/
+          clientId: gmail-archive-sync
+        # Optional: run web and worker as separate Deployments.
+        # worker:
+        #   enabled: true
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: gmail-archive-sync
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+      - ServerSideApply=true

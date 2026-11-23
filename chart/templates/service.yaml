@@ -1,0 +1,38 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}-http
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.http.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "gmail-archive-sync.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: web
+{{- if .Values.worker.enabled }}
+---
+# Health and metrics only, so Prometheus can scrape worker pods.
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "gmail-archive-sync.fullname" . }}-worker
+  labels:
+    {{- include "gmail-archive-sync.labels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: {{ .Values.http.port }}
+      targetPort: http
+      protocol: TCP
+  selector:
+    {{- include "gmail-archive-sync.selectorLabels" . | nindent 4 }}
+    app.kubernetes.io/component: worker
+{{- end }}
