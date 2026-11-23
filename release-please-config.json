@@ -4,7 +4,6 @@
     ".": {
       "release-type": "simple",
       "package-name": "gmail-archive-sync",
-      "release-as": "0.1.0",
       "include-component-in-tag": false,
       "changelog-path": "CHANGELOG.md",
       "extra-files": [
